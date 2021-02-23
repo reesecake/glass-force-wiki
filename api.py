@@ -9,7 +9,7 @@ from models import db
 app = Flask(__name__)
 
 app.config['APP_SETTINGS'] = os.getenv('APP_SETTINGS')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:root@localhost/tutorial_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 migrate = Migrate(app, db)
