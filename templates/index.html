@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Welcome to Glass Force {% endblock %}</h1>
+
+    <div class="row">
+        <div class="card" style="width: 18rem;">
+            <img src="/static/assets/pixel_nysnyl.png" class="card-img-top" alt="nysnyl">
+            <div class="card-body">
+                <h5 class="card-title">Nysnyl</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="{{ url_for('player_character', pc_id='nysnyl') }}" class="btn btn-primary">See info</a>
+            </div>
+        </div>
+
+        <div class="card" style="width: 18rem;">
+            <img src="/static/assets/pixel_arilys.png" class="card-img-top" alt="Arilys">
+            <div class="card-body">
+                <h5 class="card-title">Arilys</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+
+        <div class="card" style="width: 18rem;">
+            <img src="/static/assets/pixel_roku.png" class="card-img-top" alt="Roku">
+            <div class="card-body">
+                <h5 class="card-title">Roku</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+
+        <div class="card" style="width: 18rem;">
+            <img src="/static/assets/pixel_aribis.png" class="card-img-top" alt="Aribis">
+            <div class="card-body">
+                <h5 class="card-title">Aribis</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    </div>
+
+    {% for post in posts %}
+        <a href="{{ url_for('post', post_id=post['id']) }}">
+            <h2>{{ post['title'] }}</h2>
+        </a>
+        <span class="badge badge-primary">{{ post['created'] }}</span>
+        <a href="{{ url_for('edit', id=post['id']) }}">
+            <span class="badge badge=warning">Edit</span>
+        </a>
+        <hr>
+    {% endfor %}
+{% endblock %}
