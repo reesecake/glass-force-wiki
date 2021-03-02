@@ -44,8 +44,11 @@ def player_character(pc_id):
 
     try:
         character = s.query(Character).filter_by(name=pc_id).first()
+        if character is None:
+            raise Exception("Sorry, that character could not be located.")
     except Exception as e:
-        return str(e)
+        s.close()
+        return render_template('404_page.html', message=str(e))
 
     s.close()
     return render_template('player_character.html', character=character)

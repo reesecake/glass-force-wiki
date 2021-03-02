@@ -5,6 +5,6 @@
     <span class="badge badge-primary">{{ character['race'] }}</span>
     <div class="row">
         <p>{{ character['desc'] }}</p>
-        <img src="/static/assets/pixel_{{ character['name'] }}.png" class="img-thumbnail rounded mx-auto d-block" alt="{{ character['name'] }}">
+        <img src="/static/assets/pixel_{{ character['name'].lower() }}.png" class="img-thumbnail rounded mx-auto d-block" alt="{{ character['name'] }}">
     </div>
 {% endblock %}
