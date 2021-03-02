@@ -3,6 +3,9 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
+DATABASE_URI = 'postgres+psycopg2://postgres:root@localhost:5432/tutorial_db'
+
+
 class Config(object):
     DEBUG = False
     TESTING = False

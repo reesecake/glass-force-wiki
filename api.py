@@ -1,14 +1,18 @@
 import os
 
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from flask_migrate import Migrate
 
-from models import db, Book, Character
+from crud import engine, recreate_database, Session
+from models import db, Book, Character, Base
 
 
 def get_pc(pc_id):
-    post = db.Query.get(pc_id)
-    return post
+    s = Session()
+
+    character = s.query(Character).filter_by(name=pc_id).first()
+    s.close()
+    return character
 
 
 app = Flask(__name__)
@@ -16,12 +20,15 @@ app = Flask(__name__)
 app.config['APP_SETTINGS'] = os.getenv('APP_SETTINGS')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.secret_key = 'secret bonk key'
 db.init_app(app)
 migrate = Migrate(app, db)
 
 
 @app.route('/')
 def index():
+    s = Session()
+    s.close_all()
     posts = []
     return render_template('index.html', posts=posts)
 
@@ -33,9 +40,86 @@ def about():
 
 @app.route('/players/<string:pc_id>')
 def player_character(pc_id):
-    pc_page = get_pc(pc_id)
-    return render_template('post.html', post=pc_page)
+    s = Session()
 
+    try:
+        character = s.query(Character).filter_by(name=pc_id).first()
+    except Exception as e:
+        return str(e)
+
+    s.close()
+    return render_template('player_character.html', character=character)
+
+
+@app.route('/players/add', methods=['GET', 'POST'])
+def add_character():
+    s = Session()
+
+    if request.method == 'POST':
+        name = request.form.get('name')
+        desc = request.form.get('desc')
+        race = request.form.get('race')
+        try:
+            character = Character(
+                name=name,
+                desc=desc,
+                race=race
+            )
+            s.add(character)
+            s.commit()
+            s.close()
+            return redirect(url_for('player_character', pc_id=name))
+        except Exception as e:
+            return str(e)
+    return render_template("char_form.html")
+
+
+@app.route('/characters')
+def get_all_characters():
+    s = Session()
+
+    try:
+        characters = s.query(Character).all()
+        s.close()
+        return render_template("character_list.html", characters=characters)
+    except Exception as e:
+        return str(e)
+
+
+@app.route('/players/<string:pc_id>/edit', methods=('GET', 'POST'))
+def edit(pc_id):
+    post = get_pc(pc_id)
+
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
+
+        # if not title:
+        #     flash('Title is required!')
+        # else:
+        #     conn = get_db_connection()
+        #     conn.execute('UPDATE posts SET title = ?, content = ? WHERE id = ?',
+        #                  (title, content, id))
+        #     conn.commit()
+        #     conn.close()
+        #     return redirect(url_for('index'))
+
+    return render_template('edit.html', character=post)
+
+
+@app.route('/players/<string:pc_id>//delete', methods=('POST',))
+def delete(pc_id):
+    character = get_pc(pc_id)
+    s = Session()
+    s.delete(character)
+    s.commit()
+    flash('"{}" was successfully deleted!'.format(character.name))
+
+    s.close()
+    return redirect(url_for('get_all_characters'))
+
+
+# TODO: remove -------------------------------------------------------
 
 @app.route("/add")
 def add_book():
@@ -89,8 +173,10 @@ def add_book_form():
             db.session.commit()
             return "Book added. book id={}".format(book.id)
         except Exception as e:
-            return(str(e))
+            return str(e)
     return render_template("getdata.html")
+
+# TODO: end remove -------------------------------------------------------------
 
 
 @app.route("/bonk")
@@ -125,37 +211,3 @@ def create():
     #         return redirect(url_for('index'))
 
     return render_template('create.html')
-
-"""
-@app.route('/<int:id>/edit', methods=('GET', 'POST'))
-def edit(id):
-    post = get_post(id)
-
-    if request.method == 'POST':
-        title = request.form['title']
-        content = request.form['content']
-
-        if not title:
-            flash('Title is required!')
-        else:
-            conn = get_db_connection()
-            conn.execute('UPDATE posts SET title = ?, content = ? WHERE id = ?',
-                         (title, content, id))
-            conn.commit()
-            conn.close()
-            return redirect(url_for('index'))
-
-    return render_template('edit.html', post=post)
-"""
-
-"""
-@app.route('/<int:id>/delete', methods=('POST',))
-def delete(id):
-    post = get_post(id)
-    conn = get_db_connection()
-    conn.execute('DELETE FROM posts WHERE id = ?', (id,))
-    conn.commit()
-    conn.close()
-    flash('"{}" was successfully deleted!'.format(post['title']))
-    return redirect(url_for('index'))
-"""

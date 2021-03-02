@@ -13,7 +13,7 @@
   <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{{ url_for('index')}}">FlaskBlog</a>
+    <a class="navbar-brand" href="{{ url_for('index')}}">Glass Force</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -29,7 +29,9 @@
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
               <li><a class="dropdown-item" href="{{ url_for('about') }}">About</a></li>
               <li><a class="dropdown-item" href="{{ url_for('create') }}">Create New Post</a></li>
-              <li><a class="dropdown-item" href="{{ url_for('bonk') }}">bonk</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('get_all_characters') }}">All Characters</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{{ url_for('add_character') }}">Add a character</a></li>
           </ul>
         </li>
       </ul>
