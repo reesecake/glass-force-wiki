@@ -88,23 +88,24 @@ def get_all_characters():
 
 @app.route('/players/<string:pc_id>/edit', methods=('GET', 'POST'))
 def edit(pc_id):
-    post = get_pc(pc_id)
+    character = get_pc(pc_id)
+
+    s = Session()
 
     if request.method == 'POST':
-        title = request.form['title']
-        content = request.form['content']
+        name = request.form['name']
+        desc = request.form['desc']
 
-        # if not title:
-        #     flash('Title is required!')
-        # else:
-        #     conn = get_db_connection()
-        #     conn.execute('UPDATE posts SET title = ?, content = ? WHERE id = ?',
-        #                  (title, content, id))
-        #     conn.commit()
-        #     conn.close()
-        #     return redirect(url_for('index'))
+        if not name:
+            flash('name is required!')
+        else:
+            s.execute('UPDATE character SET name = ?, desc = ? WHERE name = ?',
+                      (name, desc, name))
+            s.commit()
+            s.close()
+            return redirect(url_for('index'))
 
-    return render_template('edit.html', character=post)
+    return render_template('edit.html', character=character)
 
 
 @app.route('/players/<string:pc_id>//delete', methods=('POST',))
@@ -160,11 +161,11 @@ def get_by_id(id_):
 @app.route("/add/form", methods=['GET', 'POST'])
 def add_book_form():
     if request.method == 'POST':
-        name=request.form.get('name')
-        author=request.form.get('author')
-        published=request.form.get('published')
+        name = request.form.get('name')
+        author = request.form.get('author')
+        published = request.form.get('published')
         try:
-            book=Book(
+            book = Book(
                 name=name,
                 author=author,
                 published=published
@@ -175,6 +176,7 @@ def add_book_form():
         except Exception as e:
             return str(e)
     return render_template("getdata.html")
+
 
 # TODO: end remove -------------------------------------------------------------
 
@@ -193,6 +195,7 @@ def post(post_id):
     post_num = get_post(post_id)
     return render_template('post.html', post=post_num)
 """
+
 
 @app.route('/create', methods=('GET', 'POST'))
 def create():
