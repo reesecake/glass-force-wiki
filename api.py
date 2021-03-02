@@ -186,6 +186,22 @@ def bonk():
     return render_template("bonk.html")
 
 
+@app.route('/db/reset', methods=['GET', 'POST'])
+def db_reset():
+    s = Session()
+
+    if request.method == 'POST':
+        password = request.form['password']
+
+        try:
+            if password == 'bonk':
+                recreate_database()
+                flash('Database tables were reset')
+        except Exception as e:
+            return str(e)
+    return render_template("db_reset.html")
+
+
 if __name__ == '__main__':
     app.run()
 

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} Reset Database {% endblock %}</h1>
+
+            <form method="POST">
+
+                <div class="form-row">
+                    <label for="author">Reset DB password</label>
+                    <input class="form-control" type="text" placeholder="Password" name="password" value="{{ request.form['password'] }}">
+                </div>
+                <br>
+
+                <button type="submit" class="btn btn-primary " style="float:right ">Submit</button>
+
+            </form>
+{% endblock %}
