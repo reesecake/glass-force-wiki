@@ -4,7 +4,7 @@ from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from models import Book, Character, Base
+from models import Entry, Character, Base
 from config import DATABASE_URI
 
 # Create, Read, Update, Delete
@@ -40,10 +40,9 @@ if __name__ == '__main__':
     recreate_database()
     # add_data()
 
-    book = Book(
-            name='Deep Learning',
-            author='Ian Goodfellow',
-            published=datetime(2016, 11, 18)
+    entry = Entry(
+            date='01/01',
+            content='wow things happened here'
     )
     with session_scope() as s:
-        s.add(book)
+        s.add(entry)

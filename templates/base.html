@@ -28,7 +28,6 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
               <li><a class="dropdown-item" href="{{ url_for('about') }}">About</a></li>
-              <li><a class="dropdown-item" href="{{ url_for('create') }}">Create New Post</a></li>
               <li><a class="dropdown-item" href="{{ url_for('get_all_characters') }}">All Characters</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="{{ url_for('add_character') }}">Add a character</a></li>
@@ -47,6 +46,19 @@
               <li><a class="dropdown-item" href="{{ url_for('bonk') }}">Add a location</a></li>
           </ul>
         </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Session Entries
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+              <li><a class="dropdown-item" href="{{ url_for('bonk') }}">Most Recent</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('create') }}">Create New Entry</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{{ url_for('all_entries') }}">All Entries</a></li>
+          </ul>
+        </li>
+
       </ul>
     </div>
   </div>

@@ -6,31 +6,6 @@ db = SQLAlchemy()
 Base = declarative_base()
 
 
-class Book(Base):
-    __tablename__ = 'books'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String())
-    author = db.Column(db.String())
-    published = db.Column(db.String())
-
-    def __init__(self, name, author, published):
-        self.name = name
-        self.author = author
-        self.published = published
-
-    def __repr__(self):
-        return '<id {}>'.format(self.id)
-
-    def serialize(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'author': self.author,
-            'published': self.published
-        }
-
-
 class Character(Base):
     __tablename__ = 'characters'
 
@@ -52,4 +27,30 @@ class Character(Base):
             'name': self.name,
             'author': self.desc,
             'published': self.race
+        }
+
+
+class Entry(Base):
+    """
+    Class for dnd session data
+    """
+    __tablename__ = 'entries'
+
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.String())  # could be datetime
+    content = db.Column(db.String())
+
+    def __init__(self, date, content):
+        # self.id = id
+        self.date = date
+        self.content = content
+
+    def __repr__(self):
+        return '<id {}>'.format(self.id)
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'date': self.date,
+            'content': self.content
         }
