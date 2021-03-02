@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>{% block title %} {{ post['title'] }} {% endblock %}</h2>
-    <span class="badge badge-primary">{{ post['created'] }}</span>
-    <p>{{ post['content'] }}</p>
+    <h2>{% block title %} {{ character['name'] }} {% endblock %}</h2>
+    <span class="badge badge-primary">{{ character['race'] }}</span>
+    <div class="row">
+        <p>{{ character['desc'] }}</p>
+        <img src="/static/assets/pixel_{{ character['name'] }}.png" class="img-thumbnail rounded mx-auto d-block" alt="{{ character['name'] }}">
+    </div>
 {% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Character list {% endblock %}</h1>
+    {% for character in characters %}
+        <a href="{{ url_for('player_character', pc_id=character['name']) }}">
+            <h2>{{ character['name'] }}</h2>
+        </a>
+        <span class="badge badge-primary">{{ character['race'] }}</span>
+        <a href="{{ url_for('edit', pc_id=character['name']) }}">
+            <span class="badge badge=warning">Edit</span>
+        </a>
+        <hr>
+    {% endfor %}
+{% endblock %}

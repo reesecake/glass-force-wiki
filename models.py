@@ -1,9 +1,12 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.ext.declarative import declarative_base
 
 db = SQLAlchemy()
 
+Base = declarative_base()
 
-class Book(db.Model):
+
+class Book(Base):
     __tablename__ = 'books'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -28,7 +31,7 @@ class Book(db.Model):
         }
 
 
-class Character(db.Model):
+class Character(Base):
     __tablename__ = 'characters'
 
     # id = db.Column(db.Integer, primary_key=True)

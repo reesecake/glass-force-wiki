@@ -13,23 +13,38 @@
   <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{{ url_for('index')}}">FlaskBlog</a>
+    <a class="navbar-brand" href="{{ url_for('index')}}">Glass Force</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
       <ul class="navbar-nav">
-          <li class="nav-item active">
+          <li class="nav-item">
               <a class="nav-link" href="{{ url_for('about') }}">About</a>
           </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
+            Characters
           </a>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
               <li><a class="dropdown-item" href="{{ url_for('about') }}">About</a></li>
               <li><a class="dropdown-item" href="{{ url_for('create') }}">Create New Post</a></li>
-              <li><a class="dropdown-item" href="{{ url_for('bonk') }}">bonk</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('get_all_characters') }}">All Characters</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{{ url_for('add_character') }}">Add a character</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Locations
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+              <li><a class="dropdown-item" href="{{ url_for('bonk') }}">Trollskull Manor</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('bonk') }}">Yawning Maw</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('bonk') }}">All Locations</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{{ url_for('bonk') }}">Add a location</a></li>
           </ul>
         </li>
       </ul>
