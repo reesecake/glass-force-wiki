@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
-from api import login
+from api import login, db
 
 
 Base = declarative_base()
