@@ -1,12 +1,31 @@
 import os
 
+from flask_login import current_user, login_user
+from werkzeug.urls import url_parse
+
 from app.forms import LoginForm
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from flask_migrate import Migrate
 
 from crud import engine, recreate_database, Session
-from models import db, Character, Entry
-from api import app, get_pc, get_entry
+from models import db, Character, Entry, User
+from api import app
+
+
+def get_pc(pc_id):
+    s = Session()
+
+    character = s.query(Character).filter_by(name=pc_id).first()
+    s.close()
+    return character
+
+
+def get_entry(id_):
+    s = Session()
+
+    session_entry = s.query(Entry).filter_by(id=id_).first()
+    s.close()
+    return session_entry
 
 
 @app.route('/')
@@ -25,12 +44,17 @@ def about():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
     form = LoginForm()
 
     if form.validate_on_submit():
-        flash('Login requested for user: {}, remember_me={}'.format(
-            form.username.data, form.remember_me.data
-        ))
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            redirect(url_for('login'))
+        login_user(user, remember=form.remember_me.data)
         return redirect(url_for('index'))
 
     return render_template('login.html', form=form)
@@ -87,6 +111,7 @@ def get_all_characters():
         return str(e)
 
 
+# TODO: fix
 @app.route('/players/<string:pc_id>/edit', methods=('GET', 'POST'))
 def edit_character(pc_id):
     character = get_pc(pc_id)

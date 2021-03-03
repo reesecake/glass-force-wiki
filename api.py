@@ -1,36 +1,17 @@
+from flask_login import LoginManager
+from flask_sqlalchemy import SQLAlchemy
+
 from config import Config
 from flask import Flask
 from flask_migrate import Migrate
-
-from crud import Session
-from app.models import db, Character, Entry
-
-
-def get_pc(pc_id):
-    s = Session()
-
-    character = s.query(Character).filter_by(name=pc_id).first()
-    s.close()
-    return character
-
-
-def get_entry(id_):
-    s = Session()
-
-    session_entry = s.query(Entry).filter_by(id=id_).first()
-    s.close()
-    return session_entry
 
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
-# app.config['APP_SETTINGS'] = os.getenv('APP_SETTINGS')
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# app.secret_key = 'secret bonk key'
-db.init_app(app)
+db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+login = LoginManager(app)
 
 # # TODO: remove -------------------------------------------------------
 #

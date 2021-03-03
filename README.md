@@ -1,6 +1,12 @@
 # Glass Force Wiki
 Made with Flask
 
+### api.py
+Added LoginManager for user login state.
+
+### Routes.py
+TODO: Separate player_characters from characters
+
 ### Models.py
 #### User:
 - User['password_hash'] means the password won't be stored as plain text.
