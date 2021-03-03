@@ -1,6 +1,6 @@
 import os
 
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user, logout_user
 from werkzeug.urls import url_parse
 
 from app.forms import LoginForm
@@ -8,7 +8,7 @@ from flask import Flask, request, jsonify, render_template, redirect, url_for, f
 from flask_migrate import Migrate
 
 from crud import engine, recreate_database, Session
-from models import db, Character, Entry, User
+from app.models import Character, Entry, User
 from api import app
 
 
@@ -47,17 +47,27 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
 
+    s = Session()
     form = LoginForm()
 
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = s.query(User).filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
-            redirect(url_for('login'))
+            s.close()
+            return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
+        s.close()
         return redirect(url_for('index'))
 
+    s.close()
     return render_template('login.html', form=form)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 
 @app.route('/players/<string:pc_id>')
