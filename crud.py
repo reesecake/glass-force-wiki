@@ -1,10 +1,9 @@
 from contextlib import contextmanager
-from datetime import datetime
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from models import Entry, Character, Base
+from app.models import Entry, Base
 from config import DATABASE_URI
 
 # Create, Read, Update, Delete

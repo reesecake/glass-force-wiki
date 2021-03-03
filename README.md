@@ -8,3 +8,4 @@ Made with Flask
 #### Character:
 #### Entry:
 - Entry['timestamp'] is passed the function datetime.utcnow instead of a call utcnow(). It needs to be converted to a user's local time.
+- Get an expression defined by backref='author' in the User class to reference the object tied to an entry's user_id foreign key.

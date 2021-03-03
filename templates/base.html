@@ -28,9 +28,9 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
               <li><a class="dropdown-item" href="{{ url_for('about') }}">About</a></li>
-              <li><a class="dropdown-item" href="{{ url_for('get_all_characters') }}">All Characters</a></li>
-              <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="{{ url_for('add_character') }}">Add a character</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{{ url_for('get_all_characters') }}">All Characters</a></li>
           </ul>
         </li>
 
@@ -41,9 +41,9 @@
           <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
               <li><a class="dropdown-item" href="{{ url_for('bonk') }}">Trollskull Manor</a></li>
               <li><a class="dropdown-item" href="{{ url_for('bonk') }}">Yawning Maw</a></li>
-              <li><a class="dropdown-item" href="{{ url_for('bonk') }}">All Locations</a></li>
-              <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="{{ url_for('bonk') }}">Add a location</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{{ url_for('bonk') }}">All Locations</a></li>
           </ul>
         </li>
 
@@ -57,6 +57,10 @@
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="{{ url_for('all_entries') }}">All Entries</a></li>
           </ul>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('login') }}">Log in</a>
         </li>
 
       </ul>
