@@ -3,7 +3,7 @@
 {% block content %}
     <h1>{% block title %} Welcome to Glass Force {% endblock %}</h1>
 
-    {% if pcs is not none %}
+    {% if pcs %}
     <h3>Player characters:</h3>
     {% endif %}
     <div class="row">
@@ -22,14 +22,17 @@
     </div>
 
     <br>
-{#    {% for post in posts %}#}
-{#        <a href="{{ url_for('post', post_id=post['id']) }}">#}
-{#            <h2>{{ post['title'] }}</h2>#}
-{#        </a>#}
-{#        <span class="badge badge-primary">{{ post['created'] }}</span>#}
-{#        <a href="{{ url_for('edit_character', id=post['id']) }}">#}
-{#            <span class="badge badge=warning">Edit</span>#}
-{#        </a>#}
-{#        <hr>#}
-{#    {% endfor %}#}
+    {% if locations  %}
+    <h3>Locations:</h3>
+        {% for loc in locations %}
+            <a href="{{ url_for('location', loc_id=loc['id']) }}">
+                <h2>{{ loc['name'] }}</h2>
+            </a>
+            <span class="badge badge-primary">{{ loc['timestamp'] }}</span>
+    {#        <a href="{{ url_for('edit_character', id=loc['id']) }}">#}
+    {#            <span class="badge badge=warning">Edit</span>#}
+    {#        </a>#}
+    {#        <hr>#}
+        {% endfor %}
+    {% endif %}
 {% endblock %}

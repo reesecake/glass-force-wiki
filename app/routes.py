@@ -35,8 +35,9 @@ def index():
 
     try:
         pcs = s.query(Character).filter_by(player_character=True).all()
+        locs = s.query(Location).limit(2).all()
         s.close()
-        return render_template('index.html', pcs=pcs)
+        return render_template('index.html', pcs=pcs, locations=locs)
     except Exception as e:
         return str(e)
 
@@ -164,7 +165,7 @@ def edit_character(pc_id):
             s.close()
             return redirect(url_for('index'))
 
-    return render_template('edit.html', character=character)
+    return render_template('characters/edit.html', character=character)
 
 
 @app.route('/players/<string:pc_id>/delete', methods=('POST',))
@@ -228,7 +229,7 @@ if __name__ == '__main__':
 @app.route('/entries/<int:post_id>')
 def entry(post_id):
     post = get_entry(post_id)
-    return render_template('entry.html', entry=post)
+    return render_template('entries/entry.html', entry=post)
 
 
 @app.route('/entries')
@@ -238,7 +239,7 @@ def all_entries():
     try:
         entries_list = s.query(Entry).all()
         s.close()
-        return render_template("entries_list.html", entries=entries_list)
+        return render_template("entries/entries_list.html", entries=entries_list)
     except Exception as e:
         return str(e)
 
