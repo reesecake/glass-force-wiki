@@ -27,6 +27,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Entry', backref='author', lazy='dynamic')
+    location_posts = db.relationship('Location', backref='author', lazy='dynamic')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -41,10 +42,11 @@ class User(UserMixin, db.Model):
 class Character(db.Model):
     __tablename__ = 'characters'
 
-    # id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(), index=True)
     desc = db.Column(db.String())
     race = db.Column(db.String())
+    player_character = db.Column(db.Boolean())
 
     def __init__(self, name, desc, race):
         self.name = name
@@ -57,8 +59,8 @@ class Character(db.Model):
     def serialize(self):
         return {
             'name': self.name,
-            'author': self.desc,
-            'published': self.race
+            'desc': self.desc,
+            'race': self.race
         }
 
 
