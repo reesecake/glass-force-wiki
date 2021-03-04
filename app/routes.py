@@ -100,7 +100,7 @@ def view_character(pc_id):
     s = Session()
 
     try:
-        character = s.query(Character).filter_by(name=pc_id).first()
+        character = get_pc(pc_id)
         if character is None:
             raise Exception("Sorry, that character could not be located.")
     except Exception as e:
@@ -127,7 +127,7 @@ def add_character():
         s.add(character)
         s.commit()
         s.close()
-        flash('"{}" has been added as a character!'.format(form.name.data))  # broken
+        flash('"{}" has been added as a character!'.format(form.name.data))
         return redirect(url_for('view_character', pc_id=form.name.data))
 
     return render_template('characters/add_char_form.html', form=form)
