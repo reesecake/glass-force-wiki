@@ -3,7 +3,7 @@ import os
 from flask_login import current_user, login_user, logout_user
 from werkzeug.urls import url_parse
 
-from app.forms import LoginForm
+from app.forms import LoginForm, RegistrationForm
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from flask_migrate import Migrate
 
@@ -68,6 +68,26 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        s = Session()
+
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        s.add(user)
+        s.commit()
+        s.close()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('login'))
+
+    return render_template('registration.html', form=form)
 
 
 @app.route('/players/<string:pc_id>')

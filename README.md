@@ -15,3 +15,8 @@ TODO: Separate player_characters from characters
 #### Entry:
 - Entry['timestamp'] is passed the function datetime.utcnow instead of a call utcnow(). It needs to be converted to a user's local time.
 - Get an expression defined by backref='author' in the User class to reference the object tied to an entry's user_id foreign key.
+
+### forms.py
+#### RegistrationForm
+- Uses validator *Email()* to check that given input is in email format.
+- Uses validator *EqualTo()* to check that the field is the same as the first field (as is standard for password creation).
