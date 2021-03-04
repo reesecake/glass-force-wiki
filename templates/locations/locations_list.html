@@ -3,7 +3,7 @@
 {% block content %}
     <h1>{% block title %} Locations {% endblock %}</h1>
     {% for loc in locations %}
-        <a href="{{ url_for('location', loc_id=loc['id']) }}">
+        <a href="{{ url_for('location', loc_name=loc['name']) }}">
             <h2>{{ loc['name'] }}</h2>
         </a>
         <span class="badge badge-primary">{{ loc['timestamp'] }}</span>

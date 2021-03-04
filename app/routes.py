@@ -180,11 +180,11 @@ def delete(pc_id):
     return redirect(url_for('get_all_characters'))
 
 
-@app.route('/locations/<int:loc_id>')
-def location(loc_id):
+@app.route('/locations/<string:loc_name>')
+def location(loc_name):
     s = Session()
 
-    loc = s.query(Location).filter_by(id=loc_id).first()
+    loc = s.query(Location).filter_by(name=loc_name).first()
     s.close()
     return render_template('locations/location.html', location=loc)
 
@@ -226,7 +226,7 @@ def add_location():
         loc = s.query(Location).filter_by(name=form.name.data).first()
         s.close()
         flash('"{}" has been added as a location!'.format(form.name.data))
-        return redirect(url_for('location', loc_id=loc.id))
+        return redirect(url_for('location', loc_name=loc.name))
 
     return render_template('locations/add_location_form.html', form=form)
 
