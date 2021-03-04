@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Locations {% endblock %}</h1>
+    {% for loc in locations %}
+        <a href="{{ url_for('location', loc_name=loc['name']) }}">
+            <h2>{{ loc['name'] }}</h2>
+        </a>
+        <span class="badge badge-primary">{{ loc['timestamp'] }}</span>
+{#        <a href="{{ url_for('edit', id=sess['id']) }}">#}
+{#            <span class="badge badge=warning">Edit</span>#}
+{#        </a>#}
+        <hr>
+    {% endfor %}
+{% endblock %}

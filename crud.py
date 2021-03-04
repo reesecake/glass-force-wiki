@@ -1,10 +1,9 @@
 from contextlib import contextmanager
-from datetime import datetime
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from models import Entry, Character, Base
+from app.models import Base
 from config import DATABASE_URI
 
 # Create, Read, Update, Delete
@@ -40,9 +39,9 @@ if __name__ == '__main__':
     recreate_database()
     # add_data()
 
-    entry = Entry(
-            date='01/01',
-            content='wow things happened here'
-    )
-    with session_scope() as s:
-        s.add(entry)
+    # entry = Entry(
+    #         date='01/01',
+    #         content='wow things happened here'
+    # )
+    # with session_scope() as s:
+    #     s.add(entry)
