@@ -3,53 +3,33 @@
 {% block content %}
     <h1>{% block title %} Welcome to Glass Force {% endblock %}</h1>
 
+    {% if pcs is not none %}
+    <h3>Player characters:</h3>
+    {% endif %}
     <div class="row">
-        <div class="card" style="width: 18rem;">
-            <img src="/static/assets/pixel_nysnyl.png" class="card-img-top" alt="nysnyl">
-            <div class="card-body">
-                <h5 class="card-title">Nysnyl</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="{{ url_for('view_character', pc_id='Nysnyl') }}" class="btn btn-primary">See info</a>
-            </div>
-        </div>
+        {% for pc in pcs %}
 
-        <div class="card" style="width: 18rem;">
-            <img src="/static/assets/pixel_arilys.png" class="card-img-top" alt="Arilys">
-            <div class="card-body">
-                <h5 class="card-title">Arilys</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="{{ url_for('view_character', pc_id='Arilys') }}" class="btn btn-primary">See info</a>
+            <div class="card" style="width: 18rem;">
+                <img src="/static/assets/pixel_{{ pc.name }}.png" class="card-img-top" alt="{{ pc.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ pc.name }}</h5>
+                    <p class="card-text">{{ pc.desc }}</p>
+                    <a href="{{ url_for('view_character', pc_id='{{ pc.name }}') }}" class="btn btn-primary">See info</a>
+                </div>
             </div>
-        </div>
 
-        <div class="card" style="width: 18rem;">
-            <img src="/static/assets/pixel_roku.png" class="card-img-top" alt="Roku">
-            <div class="card-body">
-                <h5 class="card-title">Roku</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="{{ url_for('view_character', pc_id='Roku') }}" class="btn btn-primary">See info</a>
-            </div>
-        </div>
-
-        <div class="card" style="width: 18rem;">
-            <img src="/static/assets/pixel_aribis.png" class="card-img-top" alt="Aribis">
-            <div class="card-body">
-                <h5 class="card-title">Aribis</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="{{ url_for('view_character', pc_id='Aribis') }}" class="btn btn-primary">See info</a>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 
     <br>
-    {% for post in posts %}
-        <a href="{{ url_for('post', post_id=post['id']) }}">
-            <h2>{{ post['title'] }}</h2>
-        </a>
-        <span class="badge badge-primary">{{ post['created'] }}</span>
-        <a href="{{ url_for('edit_character', id=post['id']) }}">
-            <span class="badge badge=warning">Edit</span>
-        </a>
-        <hr>
-    {% endfor %}
+{#    {% for post in posts %}#}
+{#        <a href="{{ url_for('post', post_id=post['id']) }}">#}
+{#            <h2>{{ post['title'] }}</h2>#}
+{#        </a>#}
+{#        <span class="badge badge-primary">{{ post['created'] }}</span>#}
+{#        <a href="{{ url_for('edit_character', id=post['id']) }}">#}
+{#            <span class="badge badge=warning">Edit</span>#}
+{#        </a>#}
+{#        <hr>#}
+{#    {% endfor %}#}
 {% endblock %}

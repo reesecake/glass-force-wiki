@@ -55,7 +55,7 @@ class Character(db.Model):
         self.player_character = player_character
 
     def __repr__(self):
-        return '<id {}>'.format(self.name)
+        return '<name {}>'.format(self.name)
 
     def serialize(self):
         return {

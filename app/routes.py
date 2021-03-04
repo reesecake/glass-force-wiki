@@ -32,9 +32,13 @@ def get_entry(id_):
 @app.route('/index')
 def index():
     s = Session()
-    s.close_all()
-    posts = []
-    return render_template('index.html', posts=posts)
+
+    try:
+        pcs = s.query(Character).filter_by(player_character=True).all()
+        s.close()
+        return render_template('index.html', pcs=pcs)
+    except Exception as e:
+        return str(e)
 
 
 @app.route('/about')
