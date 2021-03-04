@@ -48,10 +48,11 @@ class Character(db.Model):
     race = db.Column(db.String())
     player_character = db.Column(db.Boolean())
 
-    def __init__(self, name, desc, race):
+    def __init__(self, name, desc, race, player_character):
         self.name = name
         self.desc = desc
         self.race = race
+        self.player_character = player_character
 
     def __repr__(self):
         return '<id {}>'.format(self.name)

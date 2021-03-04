@@ -3,7 +3,7 @@ import os
 from flask_login import current_user, login_user, logout_user
 from werkzeug.urls import url_parse
 
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, AddCharacterForm
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from flask_migrate import Migrate
 
@@ -108,25 +108,24 @@ def view_character(pc_id):
 
 @app.route('/players/add', methods=['GET', 'POST'])
 def add_character():
-    s = Session()
+    form = AddCharacterForm()
 
-    if request.method == 'POST':
-        name = request.form.get('name')
-        desc = request.form.get('desc')
-        race = request.form.get('race')
-        try:
-            character = Character(
-                name=name,
-                desc=desc,
-                race=race
-            )
-            s.add(character)
-            s.commit()
-            s.close()
-            return redirect(url_for('view_character', pc_id=name))
-        except Exception as e:
-            return str(e)
-    return render_template("characters/add_char_form.html")
+    if form.validate_on_submit():
+        s = Session()
+
+        character = Character(
+            name=form.name.data,
+            desc=form.desc.data,
+            race=form.race.data,
+            player_character=form.player_character.data
+        )
+        s.add(character)
+        s.commit()
+        s.close()
+        flash('"{}" has been added as a character!'.format(form.name.data))  # broken
+        return redirect(url_for('view_character', pc_id=form.name.data))
+
+    return render_template('characters/add_char_form.html', form=form)
 
 
 @app.route('/characters')
