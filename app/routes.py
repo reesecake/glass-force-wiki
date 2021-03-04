@@ -221,6 +221,13 @@ def all_entries():
 
 @app.route('/entries/create', methods=('GET', 'POST'))
 def create():
+    """
+    Create a new session entry
+    """
+    if not current_user.is_authenticated:
+        flash('Please login or register to add entries.')
+        return redirect(url_for('index'))
+
     s = Session()
 
     if request.method == 'POST':
