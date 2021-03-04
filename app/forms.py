@@ -37,3 +37,9 @@ class AddCharacterForm(FlaskForm):
     race = StringField('Race')
     player_character = BooleanField('Player Character?')
     submit = SubmitField('Add')
+
+
+class AddLocationForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    content = StringField('Description')
+    submit = SubmitField('Add')

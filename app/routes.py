@@ -3,7 +3,7 @@ import os
 from flask_login import current_user, login_user, logout_user
 from werkzeug.urls import url_parse
 
-from app.forms import LoginForm, RegistrationForm, AddCharacterForm
+from app.forms import LoginForm, RegistrationForm, AddCharacterForm, AddLocationForm
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from flask_migrate import Migrate
 
@@ -199,6 +199,36 @@ def all_locations():
         return render_template("locations/locations_list.html", locations=locations_list)
     except Exception as e:
         return str(e)
+
+
+@app.route('/locations/add', methods=('GET', 'POST'))
+def add_location():
+    """
+    Create a new location
+    """
+    if not current_user.is_authenticated:
+        flash('Please login or register to add locations.')
+        return redirect(url_for('index'))
+
+    form = AddLocationForm()
+
+    if form.validate_on_submit():
+        s = Session()
+
+        new_loc = Location(
+            name=form.name.data,
+            content=form.content.data,
+            user_id=current_user.get_id()
+        )
+        s.add(new_loc)
+        s.commit()
+        # get the full data of the new loc
+        loc = s.query(Location).filter_by(name=form.name.data).first()
+        s.close()
+        flash('"{}" has been added as a location!'.format(form.name.data))
+        return redirect(url_for('location', loc_id=loc.id))
+
+    return render_template('locations/add_location_form.html', form=form)
 
 
 @app.route("/bonk")
