@@ -29,7 +29,7 @@ def session_scope():
 
 def recreate_database():
     """
-    Deletes all the tables
+    Deletes all the tables :)
     """
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)

@@ -306,4 +306,4 @@ def create():
                 return render_template('404_page.html', message=str(e))
 
     s.close()
-    return render_template('create.html')
+    return render_template('entries/add_entry_form.html')
