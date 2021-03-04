@@ -8,7 +8,7 @@ from flask import Flask, request, jsonify, render_template, redirect, url_for, f
 from flask_migrate import Migrate
 
 from crud import engine, recreate_database, Session
-from app.models import Character, Entry, User
+from app.models import Character, Entry, User, Location
 from api import app
 
 
@@ -91,7 +91,7 @@ def register():
 
 
 @app.route('/players/<string:pc_id>')
-def player_character(pc_id):
+def view_character(pc_id):
     s = Session()
 
     try:
@@ -103,7 +103,7 @@ def player_character(pc_id):
         return render_template('404_page.html', message=str(e))
 
     s.close()
-    return render_template('player_character.html', character=character)
+    return render_template('characters/view_character.html', character=character)
 
 
 @app.route('/players/add', methods=['GET', 'POST'])
@@ -123,10 +123,10 @@ def add_character():
             s.add(character)
             s.commit()
             s.close()
-            return redirect(url_for('player_character', pc_id=name))
+            return redirect(url_for('view_character', pc_id=name))
         except Exception as e:
             return str(e)
-    return render_template("char_form.html")
+    return render_template("characters/add_char_form.html")
 
 
 @app.route('/characters')
@@ -136,7 +136,7 @@ def get_all_characters():
     try:
         characters = s.query(Character).all()
         s.close()
-        return render_template("character_list.html", characters=characters)
+        return render_template("characters/character_list.html", characters=characters)
     except Exception as e:
         return str(e)
 
@@ -164,7 +164,7 @@ def edit_character(pc_id):
     return render_template('edit.html', character=character)
 
 
-@app.route('/players/<string:pc_id>//delete', methods=('POST',))
+@app.route('/players/<string:pc_id>/delete', methods=('POST',))
 def delete(pc_id):
     character = get_pc(pc_id)
     s = Session()
@@ -174,6 +174,27 @@ def delete(pc_id):
 
     s.close()
     return redirect(url_for('get_all_characters'))
+
+
+@app.route('/locations/<int:loc_id>')
+def location(loc_id):
+    s = Session()
+
+    loc = s.query(Location).filter_by(id=loc_id).first()
+    s.close()
+    return render_template('locations/location.html', location=loc)
+
+
+@app.route('/locations')
+def all_locations():
+    s = Session()
+
+    try:
+        locations_list = s.query(Location).all()
+        s.close()
+        return render_template("locations/locations_list.html", locations=locations_list)
+    except Exception as e:
+        return str(e)
 
 
 @app.route("/bonk")
