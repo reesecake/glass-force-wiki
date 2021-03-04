@@ -62,6 +62,19 @@ class Character(db.Model):
         }
 
 
+class Location(db.Model):
+    __tablename__ = 'locations'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(), index=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    content = db.Column(db.String())
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    def __repr__(self):
+        return '<Location {}>'.format(self.name)
+
+
 class Entry(db.Model):
     """
     Class for dnd session data
