@@ -90,13 +90,14 @@ class Entry(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    def __init__(self, date, content):
+    def __init__(self, date, content, user_id):
         # self.id = id
         self.date = date
         self.content = content
+        self.user_id = user_id
 
     def __repr__(self):
-        return '<id {}>'.format(self.id)
+        return '<entry id: {}>'.format(self.id)
 
     def serialize(self):
         return {

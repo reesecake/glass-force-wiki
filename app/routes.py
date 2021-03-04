@@ -274,8 +274,8 @@ def all_entries():
         return str(e)
 
 
-@app.route('/entries/create', methods=('GET', 'POST'))
-def create():
+@app.route('/entries/add', methods=('GET', 'POST'))
+def add_entry():
     """
     Create a new session entry
     """
@@ -295,7 +295,8 @@ def create():
             try:
                 new_entry = Entry(
                     date=date,
-                    content=content
+                    content=content,
+                    user_id=current_user.get_id()
                 )
                 s.add(new_entry)
                 s.commit()
