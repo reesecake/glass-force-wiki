@@ -1,9 +1,10 @@
 import os
+from datetime import datetime
 
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
-from app.forms import LoginForm, RegistrationForm, AddCharacterForm, AddLocationForm
+from app.forms import LoginForm, RegistrationForm, AddCharacterForm, AddLocationForm, EditProfileForm
 from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from flask_migrate import Migrate
 
@@ -93,6 +94,48 @@ def register():
         return redirect(url_for('login'))
 
     return render_template('registration.html', form=form)
+
+
+@app.route('/user/<username>')
+@login_required
+def user(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    posts = [
+        {'author': user, 'body': 'Test post #1'},
+        {'author': user, 'body': 'Test post #2'}
+    ]
+
+    return render_template('user_profile.html', user=user, posts=posts)
+
+
+@app.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    form = EditProfileForm()
+
+    if form.validate_on_submit():
+        s = Session()
+
+        current_user.username = form.username.data
+        current_user.about_me = form.about_me.data
+        s.commit()
+        s.close()
+        flash('Your changes have been saved.')
+        return redirect(url_for('user', username=current_user.username))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.about_me.data = current_user.about_me
+
+    return render_template('edit_profile.html', form=form)
+
+
+@app.before_request
+def before_request():
+    if current_user.is_authenticated:
+        s = Session()
+        current_user.last_seen = datetime.utcnow()
+        s.commit()
+        s.close()
 
 
 @app.route('/players/<string:pc_id>')
@@ -274,8 +317,8 @@ def all_entries():
         return str(e)
 
 
-@app.route('/entries/create', methods=('GET', 'POST'))
-def create():
+@app.route('/entries/add', methods=('GET', 'POST'))
+def add_entry():
     """
     Create a new session entry
     """
@@ -295,7 +338,8 @@ def create():
             try:
                 new_entry = Entry(
                     date=date,
-                    content=content
+                    content=content,
+                    user_id=current_user.get_id()
                 )
                 s.add(new_entry)
                 s.commit()
@@ -306,4 +350,4 @@ def create():
                 return render_template('404_page.html', message=str(e))
 
     s.close()
-    return render_template('create.html')
+    return render_template('entries/add_entry_form.html')

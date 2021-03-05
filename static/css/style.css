@@ -1,6 +1,36 @@
-h1 {
-    border: 2px #eee solid;
-    color: brown;
-    text-align: center;
-    padding: 10px;
+/*h1 {*/
+/*    border: 2px #eee solid;*/
+/*    color: brown;*/
+/*    text-align: center;*/
+/*    padding: 10px;*/
+/*}*/
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+
+    background-image: url('../assets/brand/waterdeep.jpg');
+    background-color: #cccccc;
+    background-attachment: fixed;
+    background-position: center top;
+    background-size: cover;
 }
+
+.Site-footer {
+    flex-shrink: 0;
+
+    padding: 20px;
+}
+
+.Site-content {
+    flex: 1 0 auto;
+
+    align-self: center;
+    background-color: white;
+    /*background-size: cover;*/
+    margin: 10px;
+    padding: 10px 100px 50px;
+}
+
+/* https://css-tricks.com/couple-takes-sticky-footer/ */
