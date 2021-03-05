@@ -7,7 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="../static/css/style.css">
     <title>{% block title %} {% endblock %}</title>
   </head>
 
@@ -66,13 +66,19 @@
       </ul>
 
       <ul class="nav navbar-nav ml-auto">
-          <li class="nav-item">
             {% if current_user.is_anonymous %}
-            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
             {% else %}
-            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ current_user.avatar(32) }}" alt="user img">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                        <li><a class="dropdown-item" href="{{ url_for('user', username=current_user.username) }}">Profile</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+                    </ul>
+                </li>
             {% endif %}
-        </li>
       </ul>
 
     </div>
@@ -84,7 +90,7 @@
         {% for message in get_flashed_messages() %}
             <div class="alert alert-danger">{{ message }}</div>
         {% endfor %}
-        {% block content %} {% endblock %}
+        <div class="blockcontent">{% block content %} {% endblock %}</div>
     </div>
 
     <!-- Optional JavaScript -->
