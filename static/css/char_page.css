@@ -1,0 +1,15 @@
+.info-column-block {
+    font-size: large;
+    color: white;
+    text-align: center;
+    background-color: #343a40;
+}
+
+.info-column {
+    height: 80%;
+    width: 80%;
+}
+
+.info-strip {
+    padding-left: 10px;
+}
