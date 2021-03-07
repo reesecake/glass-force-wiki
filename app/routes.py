@@ -209,10 +209,16 @@ def add_character():
     if form.validate_on_submit():
         s = Session()
 
+        if form.char_class.data == 'Select a Class':
+            form.char_class.data = None
+        if form.race.data == 'Select a Race':
+            form.race.data = None
+
         character = Character(
             name=form.name.data,
             desc=form.desc.data,
             race=form.race.data,
+            char_class=form.char_class.data,
             player_character=form.player_character.data
         )
         s.add(character)

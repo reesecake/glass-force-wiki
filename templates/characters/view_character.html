@@ -34,7 +34,9 @@
                             <p>Race</p>
                         </div>
                         <div class="col">
-                            {{ character['race'] }}
+                            {% if character['race'] %}
+                                {{ character['race'] }}
+                            {% endif %}
                         </div>
                     </div>
                     <div class="row row-cols-2">
@@ -42,7 +44,9 @@
                             <p>Class</p>
                         </div>
                         <div class="col">
-                            {{ character['class'] }}
+                            {% if character['class'] %}
+                                {{ character['class'] }}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
