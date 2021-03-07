@@ -5,6 +5,10 @@
 /*    padding: 10px;*/
 /*}*/
 
+title {
+    padding: 5px;
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -21,6 +25,11 @@ body {
     flex-shrink: 0;
 
     padding: 20px;
+}
+
+.footer-title {
+    color: white;
+    text-align: center;
 }
 
 .Site-content {

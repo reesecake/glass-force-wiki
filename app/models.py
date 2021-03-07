@@ -55,11 +55,13 @@ class Character(db.Model):
     desc = db.Column(db.String())
     race = db.Column(db.String())
     player_character = db.Column(db.Boolean())
+    char_class = db.Column(db.String())
 
-    def __init__(self, name, desc, race, player_character):
+    def __init__(self, name, desc, race, char_class, player_character):
         self.name = name
         self.desc = desc
         self.race = race
+        self.char_class = char_class
         self.player_character = player_character
 
     def __repr__(self):

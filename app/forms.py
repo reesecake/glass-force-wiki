@@ -1,7 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length
 from app.models import User
+
+races = ['Select a Race', 'Dragonborn', 'Dwarf', 'Elf', 'Gnome', 'Half-Elf', 'Halfling', 'Half-Orc', 'Human',
+         'Tiefling']
+char_classes = ['Select a Class', 'Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Paladin', 'Ranger',
+                'Rogue', 'Sorcerer', 'Warlock', 'Wizard']
 
 
 class LoginForm(FlaskForm):
@@ -40,7 +45,8 @@ class EditProfileForm(FlaskForm):
 class AddCharacterForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     desc = TextAreaField('Description')
-    race = StringField('Race')
+    race = SelectField('Race', choices=races)
+    char_class = SelectField('Class', choices=char_classes)
     player_character = BooleanField('Player Character?')
     submit = SubmitField('Add')
 

@@ -10,10 +10,16 @@ from flask_migrate import Migrate
 
 from crud import engine, recreate_database, Session
 from app.models import Character, Entry, User, Location
-from api import app
+from api import app, db
 
 
 def get_pc(pc_id):
+    """
+    Gets the Character corresponding to pc_id from the database.
+
+    :type pc_id: str
+    :return: Character
+    """
     s = Session()
 
     character = s.query(Character).filter_by(name=pc_id).first()
@@ -21,7 +27,14 @@ def get_pc(pc_id):
     return character
 
 
+# Helper function
 def get_entry(id_):
+    """
+    Gets the Entry corresponding to id_ from the database.
+
+    :type id_: int
+    :return: Entry
+    """
     s = Session()
 
     session_entry = s.query(Entry).filter_by(id=id_).first()
@@ -32,6 +45,9 @@ def get_entry(id_):
 @app.route('/')
 @app.route('/index')
 def index():
+    """
+    Passes a list of player-character Characters and two locations to the template.
+    """
     s = Session()
 
     try:
@@ -50,6 +66,9 @@ def about():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    Gives an anonymous user the login form and checks their credentials against users in the database.
+    """
     if current_user.is_authenticated:
         return redirect(url_for('index'))
 
@@ -72,12 +91,19 @@ def login():
 
 @app.route('/logout')
 def logout():
+    """
+    Logs the current_user out and redirects them to index.
+    """
     logout_user()
     return redirect(url_for('index'))
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    """
+    Presents an anonymous user with the registration form and adds their info to the database.
+    Uses user.set_password() to hash their password (instead of storing it plaintext).
+    """
     if current_user.is_authenticated:
         return redirect(url_for('index'))
 
@@ -99,6 +125,12 @@ def register():
 @app.route('/user/<username>')
 @login_required
 def user(username):
+    """
+    Gets the User data from the database given a username and renders the profile page.
+
+    :param username: the user's username
+    :type username: str
+    """
     user = User.query.filter_by(username=username).first_or_404()
     posts = [
         {'author': user, 'body': 'Test post #1'},
@@ -111,15 +143,16 @@ def user(username):
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
+    """
+    Gives the user a form to edit their profile and updates the information in the database.
+    """
     form = EditProfileForm()
 
     if form.validate_on_submit():
-        s = Session()
-
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
-        s.commit()
-        s.close()
+
+        db.session.commit()
         flash('Your changes have been saved.')
         return redirect(url_for('user', username=current_user.username))
     elif request.method == 'GET':
@@ -131,6 +164,9 @@ def edit_profile():
 
 @app.before_request
 def before_request():
+    """
+    Updates the current user's last_seen field.
+    """
     if current_user.is_authenticated:
         s = Session()
         current_user.last_seen = datetime.utcnow()
@@ -140,6 +176,12 @@ def before_request():
 
 @app.route('/players/<string:pc_id>')
 def view_character(pc_id):
+    """
+    Displays the information page about a character.
+    Note: pc_id is the name of the character and not id.
+
+    :param pc_id: string - the name of the character to view
+    """
     s = Session()
 
     try:
@@ -156,15 +198,25 @@ def view_character(pc_id):
 
 @app.route('/players/add', methods=['GET', 'POST'])
 def add_character():
+    """
+    Presents a form to create a character that is added to the database.
+    Flashes success and redirects to the page of that character.
+    """
     form = AddCharacterForm()
 
     if form.validate_on_submit():
         s = Session()
 
+        if form.char_class.data == 'Select a Class':
+            form.char_class.data = None
+        if form.race.data == 'Select a Race':
+            form.race.data = None
+
         character = Character(
             name=form.name.data,
             desc=form.desc.data,
             race=form.race.data,
+            char_class=form.char_class.data,
             player_character=form.player_character.data
         )
         s.add(character)
@@ -178,6 +230,9 @@ def add_character():
 
 @app.route('/characters')
 def get_all_characters():
+    """
+    Gets a list of all characters in the database and the template displays their name and race.
+    """
     s = Session()
 
     try:
@@ -191,28 +246,43 @@ def get_all_characters():
 # TODO: fix
 @app.route('/players/<string:pc_id>/edit', methods=('GET', 'POST'))
 def edit_character(pc_id):
-    character = get_pc(pc_id)
+    """
+    Presents a form to edit an existing character corresponding to pc_id.
+    Note: pc_id is the string name of the character and not the actual id.
 
-    s = Session()
+    :param pc_id: str - character's name
+    """
+    character = db.session.query(Character).filter_by(name=pc_id).first()
+    form = AddCharacterForm()
 
-    if request.method == 'POST':
-        name = request.form['name']
-        desc = request.form['desc']
+    if form.validate_on_submit():
 
-        if not name:
-            flash('name is required!')
-        else:
-            s.execute('UPDATE character SET name = ?, desc = ? WHERE name = ?',
-                      (name, desc, name))
-            s.commit()
-            s.close()
-            return redirect(url_for('index'))
+        character.name = form.name.data
+        character.desc = form.desc.data
+        character.race = form.race.data
+        character.char_class = form.char_class.data
+        character.player_character = form.player_character.data
 
-    return render_template('characters/edit.html', character=character)
+        db.session.commit()
+        flash('Your changes have been saved.')
+        return redirect(url_for('view_character', pc_id=form.name.data))
+    elif request.method == 'GET':
+        form.name.data = character.name
+        form.desc.data = character.desc
+        form.race.data = character.race
+        form.char_class.data = character.char_class
+        form.player_character.data = character.player_character
+
+    return render_template('characters/edit_character.html', form=form, character=character)
 
 
 @app.route('/players/<string:pc_id>/delete', methods=('POST',))
 def delete(pc_id):
+    """
+    Deletes the character from the database.
+
+    :param pc_id: str - character being deleted
+    """
     character = get_pc(pc_id)
     s = Session()
     s.delete(character)
@@ -225,6 +295,11 @@ def delete(pc_id):
 
 @app.route('/locations/<string:loc_name>')
 def location(loc_name):
+    """
+    Displays the page about the given location.
+
+    :param loc_name: str - name of the location
+    """
     s = Session()
 
     loc = s.query(Location).filter_by(name=loc_name).first()
@@ -234,6 +309,10 @@ def location(loc_name):
 
 @app.route('/locations')
 def all_locations():
+    """
+    Gets a list of all locations from the database and passes it to the template.
+    The template iterates through the list and displays some info on the location.
+    """
     s = Session()
 
     try:
@@ -247,7 +326,8 @@ def all_locations():
 @app.route('/locations/add', methods=('GET', 'POST'))
 def add_location():
     """
-    Create a new location
+    Adds a new location to the database from the given form.
+    Only reachable if the user is logged in.
     """
     if not current_user.is_authenticated:
         flash('Please login or register to add locations.')
@@ -276,11 +356,17 @@ def add_location():
 
 @app.route("/bonk")
 def bonk():
+    """
+    Placeholder template/route
+    """
     return render_template("bonk.html")
 
 
 @app.route('/db/reset', methods=['GET', 'POST'])
 def db_reset():
+    """
+    Gives a form requiring an un-hashed, plaintext password to drop and recreate all the tables in the database.
+    """
     s = Session()
 
     if request.method == 'POST':
@@ -301,12 +387,18 @@ if __name__ == '__main__':
 
 @app.route('/entries/<int:post_id>')
 def entry(post_id):
+    """
+    :param post_id: int - integer of an Entry to display its contents to a page.
+    """
     post = get_entry(post_id)
     return render_template('entries/entry.html', entry=post)
 
 
 @app.route('/entries')
 def all_entries():
+    """
+    Gets a list of all Entries and displays their title and creation time in the template.
+    """
     s = Session()
 
     try:
@@ -320,7 +412,8 @@ def all_entries():
 @app.route('/entries/add', methods=('GET', 'POST'))
 def add_entry():
     """
-    Create a new session entry
+    Presents a form to add a new entry to the database.
+    Requires the user to be logged in.
     """
     if not current_user.is_authenticated:
         flash('Please login or register to add entries.')

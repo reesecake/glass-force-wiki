@@ -2,9 +2,56 @@
 
 {% block content %}
     <h2>{% block title %} {{ character['name'] }} {% endblock %}</h2>
-    <span class="badge badge-primary">{{ character['race'] }}</span>
-    <div class="row">
-        <p>{{ character['desc'] }}</p>
-        <img src="/static/assets/pixel_{{ character['name'].lower() }}.png" class="img-thumbnail rounded mx-auto d-block" alt="{{ character['name'] }}">
+    <hr>
+    <div class="row row-cols-2">
+        <div class="col">
+            <p>{{ character['desc'] }}</p>
+        </div>
+        <div class="col">
+            <div class="info-column container">
+                <header class="info-column-block">{{ character['name'] }}</header>
+                <img src="/static/assets/pixel_{{ character['name'].lower() }}.png" class="char-portrait img-thumbnail rounded mx-auto d-block" alt="{{ character['name'] }}">
+
+                <div class="info-strip">
+                    <div class="row row-cols-2">
+                        <div class="col">
+                            <p>Type</p>
+                        </div>
+                        <div class="col">
+                            {% if character['player_character'] == true %}
+                                <p>Player Character</p>
+                            {% else %}
+                                <p>NPC</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <header class="info-column-block">Character Information</header>
+                <div class="info-strip">
+                    <div class="row row-cols-2">
+                        <div class="col">
+                            <p>Race</p>
+                        </div>
+                        <div class="col">
+                            {% if character['race'] %}
+                                {{ character['race'] }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row row-cols-2">
+                        <div class="col">
+                            <p>Class</p>
+                        </div>
+                        <div class="col">
+                            {% if character['char_class'] %}
+                                {{ character['char_class'] }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
 {% endblock %}
