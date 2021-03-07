@@ -1,8 +1,12 @@
 # Glass Force Wiki
-Made with Flask
+Made with Flask and PostgreSQL
 
 ### api.py
-Added LoginManager for user login state.
+Creates the Flask app object as well as the objects for the Flask features packages.
+
+- SQLAlchemy for accessing the database
+- Flask-Migrate for Flask support for Alembic. 
+- LoginManager for user login state.
 
 ### Routes.py
 TODO: Separate player_characters from characters
@@ -20,3 +24,8 @@ TODO: Separate player_characters from characters
 #### RegistrationForm
 - Uses validator *Email()* to check that given input is in email format.
 - Uses validator *EqualTo()* to check that the field is the same as the first field (as is standard for password creation).
+
+## Packages:
+*SQLAlchemy/Flask-SQLAlchemy*: Object Relational Mapper for managing the database without SQL. Instead, using classes and methods.
+
+*Alembic/Flask-Migrate*: used as a database migration framework for SQLAlchemy for upgrading/downgrading the database.
