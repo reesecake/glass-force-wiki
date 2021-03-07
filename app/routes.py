@@ -149,12 +149,10 @@ def edit_profile():
     form = EditProfileForm()
 
     if form.validate_on_submit():
-        s = Session()
-
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
-        s.commit()
-        s.close()
+
+        db.session.commit()
         flash('Your changes have been saved.')
         return redirect(url_for('user', username=current_user.username))
     elif request.method == 'GET':
@@ -264,9 +262,6 @@ def edit_character(pc_id):
         character.race = form.race.data
         character.char_class = form.char_class.data
         character.player_character = form.player_character.data
-            # .update()\
-            # .values(name=form.name.data, desc=form.desc.data)\
-            # .where(User.username == form.username.data)
 
         db.session.commit()
         flash('Your changes have been saved.')
