@@ -10,7 +10,7 @@ from flask_migrate import Migrate
 
 from crud import engine, recreate_database, Session
 from app.models import Character, Entry, User, Location
-from api import app
+from api import app, db
 
 
 def get_pc(pc_id):
@@ -254,24 +254,31 @@ def edit_character(pc_id):
 
     :param pc_id: str - character's name
     """
-    character = get_pc(pc_id)
+    character = db.session.query(Character).filter_by(name=pc_id).first()
+    form = AddCharacterForm()
 
-    s = Session()
+    if form.validate_on_submit():
 
-    if request.method == 'POST':
-        name = request.form['name']
-        desc = request.form['desc']
+        character.name = form.name.data
+        character.desc = form.desc.data
+        character.race = form.race.data
+        character.char_class = form.char_class.data
+        character.player_character = form.player_character.data
+            # .update()\
+            # .values(name=form.name.data, desc=form.desc.data)\
+            # .where(User.username == form.username.data)
 
-        if not name:
-            flash('name is required!')
-        else:
-            s.execute('UPDATE character SET name = ?, desc = ? WHERE name = ?',
-                      (name, desc, name))
-            s.commit()
-            s.close()
-            return redirect(url_for('index'))
+        db.session.commit()
+        flash('Your changes have been saved.')
+        return redirect(url_for('view_character', pc_id=form.name.data))
+    elif request.method == 'GET':
+        form.name.data = character.name
+        form.desc.data = character.desc
+        form.race.data = character.race
+        form.char_class.data = character.char_class
+        form.player_character.data = character.player_character
 
-    return render_template('characters/edit.html', character=character)
+    return render_template('characters/edit_character.html', form=form, character=character)
 
 
 @app.route('/players/<string:pc_id>/delete', methods=('POST',))
