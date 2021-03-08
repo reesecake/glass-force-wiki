@@ -36,6 +36,16 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
+    def serialize(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'password_hash': 'private!',
+            'about_me': self.about_me,
+            'last_seen': self.last_seen
+        }
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -69,9 +79,12 @@ class Character(db.Model):
 
     def serialize(self):
         return {
+            'id': self.id,
             'name': self.name,
             'desc': self.desc,
-            'race': self.race
+            'race': self.race,
+            'char_class': self.char_class,
+            'player_character': self.player_character
         }
 
 
@@ -84,8 +97,22 @@ class Location(db.Model):
     content = db.Column(db.String())
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    def __init__(self, name, content, user_id):
+        self.name = name,
+        self.content = content,
+        self.user_id = user_id
+
     def __repr__(self):
         return '<Location {}>'.format(self.name)
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'timestamp': self.timestamp,
+            'content': self.content,
+            'user_id': self.user_id
+        }
 
 
 class Entry(db.Model):
@@ -101,7 +128,6 @@ class Entry(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def __init__(self, date, content, user_id):
-        # self.id = id
         self.date = date
         self.content = content
         self.user_id = user_id
@@ -113,5 +139,7 @@ class Entry(db.Model):
         return {
             'id': self.id,
             'date': self.date,
-            'content': self.content
+            'content': self.content,
+            'timestamp': self.timestamp,
+            'user_id': self.user_id
         }

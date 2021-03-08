@@ -3,9 +3,11 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextA
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length
 from app.models import User
 
-races = ['Select a Race', 'Dragonborn', 'Dwarf', 'Elf', 'Gnome', 'Half-Elf', 'Halfling', 'Half-Orc', 'Human', 'Tiefling']
-char_classes = ['Select a Class', 'Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Paladin', 'Ranger', 'Rogue',
-                'Sorcerer', 'Warlock', 'Wizard']
+races = ['Select a Race', 'Dragonborn', 'Dwarf', 'Elf', 'Gnome', 'Half-Elf', 'Halfling', 'Half-Orc', 'Human',
+         'Tiefling']
+char_classes = ['Select a Class', 'Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Paladin', 'Ranger',
+                'Rogue', 'Sorcerer', 'Warlock', 'Wizard']
+
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
