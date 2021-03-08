@@ -18,3 +18,6 @@ login = LoginManager(app)
 bootstrap = Bootstrap(app)
 
 from app import routes
+from app.Character import routes
+from app.Entry import routes
+from app.Location import routes
