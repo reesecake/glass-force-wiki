@@ -21,3 +21,4 @@ from app import routes
 from app.Character import routes
 from app.Entry import routes
 from app.Location import routes
+from app.Api import routes
