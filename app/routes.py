@@ -447,6 +447,10 @@ def add_entry():
 
 ### The following routes are going to define a REST API for React to use
 
+@app.route('/react')
+def react_index():
+    return app.send_static_file('index.html')
+
 @app.route('/api/pcs')
 def api_get_all_pcs():
     """Return a """
