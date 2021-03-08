@@ -442,3 +442,21 @@ def add_entry():
 
     s.close()
     return render_template('entries/add_entry_form.html')
+
+### The following routes are going to define a REST API for React to use
+
+@app.route('/api/pcs')
+def api_get_all_pcs():
+    """Return a """
+    s = Session()
+
+    try:
+        characters = s.query(Character).filter_by(player_character=True).all()
+        s.close()
+
+        resp = dict()
+        for c in characters:
+            resp[c.id] = c.serialize()
+        return resp
+    except Exception as e:
+        return str(e)
