@@ -17,7 +17,7 @@ ex. User(Base) will get users dropped if it was originally User(db.Model)
 
 @login.user_loader
 def load_user(id_):
-    return User.query.get(int(id_))
+    return db.session.query(User).get(int(id_))
 
 
 class User(UserMixin, db.Model):
