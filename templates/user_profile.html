@@ -17,10 +17,13 @@
     </table>
 
 <hr>
-{% for post in posts %}
-<p>
-    {{ post.author.username }} says: <b>{{ post.body }}</b>
-</p>
-{% endfor %}
+    {% if user.posts %}
+        <h3>Posts by {{ user.username }}</h3>
+        {% for post in user.posts %}
+            <a href="{{ url_for('entry', post_id=post['id']) }}">
+                <h4>{{ post['date'] }}</h4>
+            </a>
+        {% endfor %}
+    {% endif %}
 
 {% endblock %}

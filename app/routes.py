@@ -102,11 +102,9 @@ def user(username):
     :param username: the user's username
     :type username: str
     """
-    user = User.query.filter_by(username=username).first_or_404()
-    posts = [
-        {'author': user, 'body': 'Test post #1'},
-        {'author': user, 'body': 'Test post #2'}
-    ]
+    user = db.session.query(User).filter_by(username=username).first_or_404()
+
+    posts = db.session.query(User).join(Entry, Entry.user_id == user.id).all()
 
     return render_template('user_profile.html', user=user, posts=posts)
 
