@@ -1,18 +1,17 @@
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import logo from '../Assets/brand/d&d_logo_amp.png';
 
 const SiteNav = (props) => {
   return (
     <Navbar bg="dark" expand="lg" variant="dark">
       <Navbar.Brand href="#home">
         <img
-          src={logo}
+          src="assets/brand/d&d_logo_amp.png"
           alt=""
           width="50"
           height="50"
-          class="d-inline-block align-center"
+          className="logo d-inline-block align-center"
         />
         Glass Force
       </Navbar.Brand>
@@ -39,7 +38,7 @@ const SiteNav = (props) => {
             <NavDropdown.Item href="#action/4">All Entries</NavDropdown.Item>
           </NavDropdown>
         </Nav>
-        <Nav class="ml-auto">
+        <Nav className="ml-auto">
           <Nav.Link href="#login" >Login</Nav.Link>
         </Nav>
       </Navbar.Collapse>
