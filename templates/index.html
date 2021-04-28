@@ -10,7 +10,8 @@
         {% for pc in pcs %}
 
             <div class="card" style="width: 18rem;">
-                <img src="/static/assets/pixel_{{ pc.name.lower() }}.png" class="card-img-top" alt="{{ pc.name }}">
+{#                <img src="/static/assets/pixel_{{ pc.name.lower() }}.png" class="card-img-top" alt="{{ pc.name }}">#}
+                <img src="https://glass-force-wiki-bucket.s3-us-west-2.amazonaws.com/{{ pc.name.lower() }}.png" class="card-img-top" alt="{{ pc.name }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ pc.name }}</h5>
                     <p class="card-text">{{ pc.desc }}</p>
