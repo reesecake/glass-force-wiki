@@ -29,3 +29,5 @@ TODO: Separate player_characters from characters
 *SQLAlchemy/Flask-SQLAlchemy*: Object Relational Mapper for managing the database without SQL. Instead, using classes and methods.
 
 *Alembic/Flask-Migrate*: used as a database migration framework for SQLAlchemy for upgrading/downgrading the database.
+
+*JSON Web Tokens*: (pyjwt) generates web tokens for password reset links.
